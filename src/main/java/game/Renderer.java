@@ -1,14 +1,32 @@
 package game;
 
-import static org.lwjgl.opengl.GL11.GL_COLOR_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11.GL_DEPTH_BUFFER_BIT;
-import static org.lwjgl.opengl.GL11C.glClear;
+import main.Parameters;
+import main.Utils;
+
+import static java.lang.Thread.sleep;
+import static org.lwjgl.glfw.GLFW.*;
 
 public class Renderer {
-    public void init() throws Exception {
+    private final long window;
+
+    public Renderer(long window) {
+        this.window = window;
     }
 
-    public void clear() {
-        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+    public void startGameLoop() throws InterruptedException {
+        double funcStartTime = glfwGetTime();
+        double secondsPerFrame = Utils.fpsToSpf(Parameters.FPS);
+
+
+        while (!glfwWindowShouldClose(window)) {
+            double loopStartTime = glfwGetTime();
+
+            // do game logic here
+
+            double timeDelta = glfwGetTime() - loopStartTime;
+            sleep(timeDelta < secondsPerFrame ? (long) timeDelta : 0);
+            glfwSwapBuffers(window);
+            glfwPollEvents();
+        }
     }
 }

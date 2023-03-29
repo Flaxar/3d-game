@@ -1,50 +1,56 @@
 package game;
 
-public class Game implements IGameLogic {
+import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWKeyCallback;
+import org.lwjgl.opengl.GL;
 
-    private int direction = 0;
+import static org.lwjgl.glfw.GLFW.*;
+import static org.lwjgl.system.MemoryUtil.NULL;
 
-    private float color = 0.0f;
+public class Game {
+    private GLFWErrorCallback errorCallback = GLFWErrorCallback.createPrint(System.err);
+    private GLFWKeyCallback keyCallback;
+    private long window;
 
-    private final Renderer renderer;
+    public Game() throws IllegalStateException {
+        glfwSetErrorCallback(errorCallback);
 
-    public DummyGame() {
-        renderer = new Renderer();
-    }
-
-    @Override
-    public void init() throws Exception {
-        renderer.init();
-    }
-
-    @Override
-    public void input(Window window) {
-        if ( window.isKeyPressed(GLFW_KEY_UP) ) {
-            direction = 1;
-        } else if ( window.isKeyPressed(GLFW_KEY_DOWN) ) {
-            direction = -1;
-        } else {
-            direction = 0;
+        if (!glfwInit()) {
+            throw new IllegalStateException("Unable to initialize GLFW");
         }
+
+        createWindow();
     }
 
-    @Override
-    public void update(float interval) {
-        color += direction * 0.01f;
-        if (color > 1) {
-            color = 1.0f;
-        } else if ( color < 0 ) {
-            color = 0.0f;
+    public void createWindow() {
+        window = glfwCreateWindow(640, 480, "Simple example", NULL, NULL);
+        if (window == NULL) {
+            glfwTerminate();
+            throw new RuntimeException("Failed to create the GLFW window");
         }
+
+        createCallbacks();
+        glfwSetKeyCallback(window, keyCallback);
+
+        glfwMakeContextCurrent(window);
+        GL.createCapabilities();
     }
 
-    @Override
-    public void render(Window window) {
-        if ( window.isResized() ) {
-            glViewport(0, 0, window.getWidth(), window.getHeight());
-            window.setResized(false);
-        }
-        window.setClearColor(color, color, color, 0.0f);
-        renderer.clear();
+    private void createCallbacks() {
+        keyCallback = new GLFWKeyCallback() {
+            @Override
+            public void invoke(long window, int key, int scancode, int action, int mods) {
+                if (key == GLFW_KEY_ESCAPE && action == GLFW_PRESS) {
+                    glfwSetWindowShouldClose(window, true);
+                }
+            }
+        };
+    }
+
+    public void endGame() {
+        glfwDestroyWindow(window);
+        keyCallback.free();
+        glfwTerminate();
+        errorCallback.free();
     }
 }
