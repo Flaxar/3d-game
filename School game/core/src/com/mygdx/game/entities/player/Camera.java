@@ -1,10 +1,9 @@
-package com.mygdx.game.player;
+package com.mygdx.game.entities.player;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.math.Vector3;
 import com.mygdx.game.GameProperties;
-import com.mygdx.game.player.controlls.PlayerInputProcessor;
 
 public class Camera extends PerspectiveCamera{
     private final Vector3 right = new Vector3();

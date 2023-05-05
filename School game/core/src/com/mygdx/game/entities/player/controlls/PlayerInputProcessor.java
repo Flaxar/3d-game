@@ -1,14 +1,8 @@
-package com.mygdx.game.player.controlls;
+package com.mygdx.game.entities.player.controlls;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
-import com.badlogic.gdx.graphics.PerspectiveCamera;
-import com.badlogic.gdx.math.MathUtils;
-import com.badlogic.gdx.math.Quaternion;
-import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.math.Vector3;
-import com.mygdx.game.GameProperties;
-import com.mygdx.game.player.Camera;
+import com.mygdx.game.entities.player.Camera;
 
 public class PlayerInputProcessor implements InputProcessor {
     Camera cam;
